@@ -13,14 +13,11 @@ connection.connect(function(err) {
     if(err) throw err;
     console.log("You've connected as ID " +connection.threadId + "\n");
     startCustomer();
-    // connection.query("Select * from products", function(err, data) {
-    //     if (err) throw err;
-    //     console.log(data);
-    // })
-    // connection.end();
 })
 function startCustomer() {
-    console.log("\n===========================================\n");
+    console.log("\n===========================================");
+    console.log("=          Welcome to B-B-B-Bamazon!      =");
+    console.log("===========================================\n");
     inquirer.prompt([
         {
             type: "list",
@@ -56,7 +53,7 @@ function readStore() {
         
         console.log(data);
         startCustomer();
-        connection.end();
+        // connection.end();
     })
 };
 
