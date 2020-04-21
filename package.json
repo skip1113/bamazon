@@ -17,7 +17,10 @@
   },
   "homepage": "https://github.com/skip1113/bamazon#readme",
   "dependencies": {
+    "chalk": "^4.0.0",
+    "cli-table2": "^0.2.0",
     "inquirer": "^7.1.0",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "table": "^5.4.6"
   }
 }

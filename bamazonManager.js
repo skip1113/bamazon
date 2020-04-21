@@ -1,6 +1,7 @@
 var mysql = require('mysql');
 var inquirer = require('inquirer');
-
+var Table = require('cli-table2');
+var chalk = require('chalk');
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -15,9 +16,9 @@ connection.connect(function (err) {
     promptManager();
 })
 function promptManager() {
-    console.log("===========================================");
-    console.log("=          Welcome Manager!               =");
-    console.log("===========================================\n");
+    console.log(chalk.yellow("==========================================="));
+    console.log(chalk.yellow("=          Welcome Manager!               ="));
+    console.log(chalk.yellow("===========================================\n"));
     inquirer.prompt([
         {
             type: "list",
@@ -35,6 +36,7 @@ function promptManager() {
         switch (answer.action) {
             case "View Products for Sale":
                 readStore();
+                // dataTable();
                 break;
 
             case "View Low Inventory":
@@ -81,8 +83,8 @@ function addProduct() {
             message: "How many units of that product?"
         }
     ]).then(function (data) {
-        console.log("You want item: " + data.id);
-        console.log("You want this many: " + data.unit);
+        console.log(chalk.blueBright("You want item: " + data.id));
+        console.log(chalk.blueBright("You want this many: " + data.unit));
         connection.query("Select stock_quantity, price, product_name from products where ?", { id: data.id}, function(err, res) {
             if (err) throw err;
             for (var i = 0; i < res.length; i++) {
@@ -90,7 +92,7 @@ function addProduct() {
                 // console.log(data.unit);
             
                 if (res[i].stock_quantity > 0) {
-                    console.log("buying now!");
+                    console.log(chalk.green("Adding to stock: " + res[i].product_name));
                     var newStock = res[i].stock_quantity + parseInt(data.unit);
                     // console.log(newStock);
                     connection.query(
@@ -105,8 +107,8 @@ function addProduct() {
                         ],
                         function(error, response) {
                             if(error) throw error;
-                            console.log("Item(s) Successfully added to inventory");
-                            console.log(response.affectedRows + " Products Edited!\n");
+                            console.log(chalk.green("Item(s) Successfully added to inventory"));
+                            console.log(chalk.magentaBright(response.affectedRows + " Products Edited!\n"));
                             userContinue();
                         }
                     )
@@ -148,7 +150,7 @@ function createProduct() {
             stock_quantity: create.stock
         },function(err){
             if(err) throw err;
-            console.log("New item has been created");
+            console.log(chalk.greenBright("New item has been created"));
             userContinue();
         }
         )
@@ -169,4 +171,14 @@ function userContinue() {
             connection.end();
         }
     })
+}
+function dataTable() {
+    var table = new Table({ head: ["ID", "Product Name", "Department Name", "Price", "Quantity in Stock"] });
+ 
+table.push(
+    { 'Left Header 1': ['Value Row 1 Col 1', 'Value Row 1 Col 2'] }
+  , { 'Left Header 2': ['Value Row 2 Col 1', 'Value Row 2 Col 2'] }
+);
+ 
+console.log(table.toString());
 }

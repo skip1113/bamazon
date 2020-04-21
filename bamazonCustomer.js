@@ -1,6 +1,6 @@
 var mysql = require('mysql');
 var inquirer = require('inquirer');
-
+var chalk = require('chalk');
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -15,9 +15,9 @@ connection.connect(function(err) {
     startCustomer();
 })
 function startCustomer() {
-    console.log("\n===========================================");
-    console.log("=          Welcome to B-B-B-Bamazon!      =");
-    console.log("===========================================\n");
+    console.log(chalk.yellow("\n==========================================="));
+    console.log(chalk.yellow("=       Welcome to B-B-B-Bamazon!         ="));
+    console.log(chalk.yellow("===========================================\n"));
     inquirer.prompt([
         {
             type: "list",
@@ -70,8 +70,8 @@ function purchaseCustomer() {
             message: "How many units of this product would you like to buy?"
         }
     ]).then(function(data) {
-        console.log("You want item: " + data.id);
-        console.log("You want this many: " + data.unit);
+        console.log(chalk.cyan("You want item: " + data.id));
+        console.log(chalk.cyan("You want this many: " + data.unit));
         connection.query("Select stock_quantity, price, product_name from products where ?", { id: data.id}, function(err, res) {
             if (err) throw err;
             for (var i = 0; i < res.length; i++) {
@@ -79,7 +79,7 @@ function purchaseCustomer() {
                 // console.log(data.unit);
             
                 if (res[i].stock_quantity > parseInt(data.unit)) {
-                    console.log("buying now!");
+                    console.log(chalk.blueBright("Buying: " + res[i].product_name));
                     var newStock = res[i].stock_quantity - parseInt(data.unit);
                     var total = res[i].price * parseInt(data.unit);
                     
@@ -96,14 +96,14 @@ function purchaseCustomer() {
                         ],
                         function(error) {
                             if(error) throw error;
-                            console.log("Item(s) Successfully bought!");
-                            console.log("Your total price is: $" + total);
+                            console.log(chalk.magenta("Item(s) Successfully bought!"));
+                            console.log(chalk.magenta("Your total price is: $" + total));
                             userContinue();
                         }
                     )
                 }
                 else {
-                    console.log("Insufficient quantity!");
+                    console.log(chalk.red("Insufficient quantity!"));
                     userContinue();
                 }
             }
