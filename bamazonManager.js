@@ -1,6 +1,6 @@
 var mysql = require('mysql');
 var inquirer = require('inquirer');
-var Table = require('cli-table2');
+const cTable = require('console.table');
 var chalk = require('chalk');
 
 var connection = mysql.createConnection({
@@ -35,8 +35,8 @@ function promptManager() {
     ]).then(function (answer) {
         switch (answer.action) {
             case "View Products for Sale":
-                readStore();
-                // dataTable();
+                // readStore();
+                dataTable();
                 break;
 
             case "View Low Inventory":
@@ -55,18 +55,27 @@ function promptManager() {
         }
     })
 }
-function readStore() {
-    connection.query("Select * from products", function (err, data) {
-        if (err) throw err;
 
-        console.log(data);
-        userContinue();
-    })
-};
 function lowStock() {
     connection.query("Select * from products where stock_quantity<=3", function (err, res) {
         if (err) throw err;
-        console.log(res);
+        // console.log(res);
+        for (var i= 0; i < res.length; i ++){
+            var number = res[i].id;
+            var name = res[i].product_name;
+            var depName = res[i].department_name;
+            var worth = res[i].price;
+            var stock = res[i].stock_quantity;
+            console.table([
+                {
+                    ID: number,
+                    Product: name,
+                    Department: depName,
+                    Price: worth,
+                    Quantity: stock
+                }
+            ]);
+        }
         userContinue();
     })
 }
@@ -173,12 +182,26 @@ function userContinue() {
     })
 }
 function dataTable() {
-    var table = new Table({ head: ["ID", "Product Name", "Department Name", "Price", "Quantity in Stock"] });
- 
-table.push(
-    { 'Left Header 1': ['Value Row 1 Col 1', 'Value Row 1 Col 2'] }
-  , { 'Left Header 2': ['Value Row 2 Col 1', 'Value Row 2 Col 2'] }
-);
- 
-console.log(table.toString());
+    connection.query("Select * from products", function (err, res) {
+        if(err) throw err;
+        for (var i= 0; i < res.length; i ++){
+            // console.log(res[0].id);
+            var number = res[i].id;
+            var name = res[i].product_name;
+            var depName = res[i].department_name;
+            var worth = res[i].price;
+            var stock = res[i].stock_quantity;
+            console.table([
+                {
+                    ID: number,
+                    Product: name,
+                    Department: depName,
+                    Price: worth,
+                    Quantity: stock
+                }
+            ]);
+        }
+        userContinue();
+    })
+    
 }

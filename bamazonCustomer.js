@@ -1,6 +1,7 @@
 var mysql = require('mysql');
 var inquirer = require('inquirer');
 var chalk = require('chalk');
+const cTable = require('console.table');
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -32,7 +33,7 @@ function startCustomer() {
     ]).then(function(answer) {
         switch (answer.action) {
             case "List Products":
-                readStore();
+                dataTable();
                 break;
 
             case "Make a purchase from the store":
@@ -47,15 +48,6 @@ function startCustomer() {
         }
     })
 }
-function readStore() {
-    connection.query("Select * from products", function(err, data) {
-        if (err) throw err;
-        
-        console.log(data);
-        startCustomer();
-        // connection.end();
-    })
-};
 
 function purchaseCustomer() {
     inquirer.prompt([
@@ -74,6 +66,7 @@ function purchaseCustomer() {
         console.log(chalk.cyan("You want this many: " + data.unit));
         connection.query("Select stock_quantity, price, product_name from products where ?", { id: data.id}, function(err, res) {
             if (err) throw err;
+            // userTable(data);
             for (var i = 0; i < res.length; i++) {
                 // console.log(res[i].stock_quantity);
                 // console.log(data.unit);
@@ -133,12 +126,12 @@ function sellProduct() {
         {
             type: "input",
             name: "id",
-            message: "What is the ID of the product that you would like to buy?"
+            message: "What is the ID of the product that you would like to sell?"
         },
         {
             type: "input",
             name: "unit",
-            message: "How many units of this product would you like to buy?"
+            message: "How many units of this product would you like to sell?"
         }
     ]).then(function(data) {
         console.log("You want item: " + data.id);
@@ -182,3 +175,28 @@ function sellProduct() {
         
     })
 };
+function dataTable() {
+    connection.query("Select * from products", function (err, res) {
+        if(err) throw err;
+        
+        for (var i= 0; i < res.length; i ++){
+            // console.log(res[0].id);
+            var number = res[i].id;
+            var name = res[i].product_name;
+            var depName = res[i].department_name;
+            var worth = res[i].price;
+            var stock = res[i].stock_quantity;
+            console.table([
+                {
+                    ID: number,
+                    Product: name,
+                    Department: depName,
+                    Price: worth,
+                    Quantity: stock
+                }
+            ]);
+        }
+        startCustomer();
+    })
+    
+}
