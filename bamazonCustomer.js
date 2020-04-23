@@ -2,7 +2,7 @@ var mysql = require('mysql');
 var inquirer = require('inquirer');
 var chalk = require('chalk');
 const cTable = require('console.table');
-
+//Making a connection to Mysql database
 var connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
@@ -15,6 +15,7 @@ connection.connect(function(err) {
     console.log("You've connected as ID " +connection.threadId + "\n");
     startCustomer();
 })
+
 function startCustomer() {
     console.log(chalk.yellow("\n==========================================="));
     console.log(chalk.yellow("=       Welcome to B-B-B-Bamazon!         ="));
@@ -31,6 +32,7 @@ function startCustomer() {
             ]
         }
     ]).then(function(answer) {
+        //if/else /switch cases for each prompt choice to call their function
         switch (answer.action) {
             case "List Products":
                 dataTable();
@@ -64,6 +66,7 @@ function purchaseCustomer() {
     ]).then(function(data) {
         console.log(chalk.cyan("You want item: " + data.id));
         console.log(chalk.cyan("You want this many: " + data.unit));
+        //Selects the wanted values from the products table from Mysql
         connection.query("Select stock_quantity, price, product_name from products where ?", { id: data.id}, function(err, res) {
             if (err) throw err;
             // userTable(data);
@@ -77,6 +80,7 @@ function purchaseCustomer() {
                     var total = res[i].price * parseInt(data.unit);
                     
                     // console.log(newStock);
+                    //Updates the data of the specific id and specific quantity the user provides
                     connection.query(
                         "UPDATE products set? where?",
                         [
@@ -175,6 +179,7 @@ function sellProduct() {
         
     })
 };
+//Data table to show the user
 function dataTable() {
     connection.query("Select * from products", function (err, res) {
         if(err) throw err;

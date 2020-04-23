@@ -55,7 +55,7 @@ function promptManager() {
         }
     })
 }
-
+//Selecting items that have a quantity that is 3 or less from Mysql data table
 function lowStock() {
     connection.query("Select * from products where stock_quantity<=3", function (err, res) {
         if (err) throw err;
@@ -99,7 +99,8 @@ function addProduct() {
             for (var i = 0; i < res.length; i++) {
                 // console.log(res[i].stock_quantity);
                 // console.log(data.unit);
-            
+                
+                //Updates an item from "products" data table the user selects
                 if (res[i].stock_quantity > 0) {
                     console.log(chalk.green("Adding to stock: " + res[i].product_name));
                     var newStock = res[i].stock_quantity + parseInt(data.unit);
@@ -151,6 +152,7 @@ function createProduct() {
             message: "How many should we stock?"
         }
     ]).then(function(create) {
+        //Inserts a new item to the database "products" that the user creates
         connection.query("INSERT INTO products SET ?",
         {
             product_name: create.name,
