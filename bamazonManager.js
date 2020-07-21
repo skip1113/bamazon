@@ -1,6 +1,6 @@
 var mysql = require('mysql');
 var inquirer = require('inquirer');
-const cTable = require('console.table');
+require('console.table');
 var chalk = require('chalk');
 
 var connection = mysql.createConnection({
