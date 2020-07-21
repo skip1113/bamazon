@@ -1,9 +1,9 @@
-var mysql = require('mysql');
-var inquirer = require('inquirer');
+const mysql = require('mysql');
+const inquirer = require('inquirer');
 require('console.table');
-var chalk = require('chalk');
+const chalk = require('chalk');
 
-var connection = mysql.createConnection({
+const connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
     user: "root",
@@ -94,38 +94,39 @@ function addProduct() {
     ]).then(function (data) {
         console.log(chalk.blueBright("You want item: " + data.id));
         console.log(chalk.blueBright("You want this many: " + data.unit));
-        connection.query("Select stock_quantity, price, product_name from products where ?", { id: data.id}, function(err, res) {
-            if (err) throw err;
-            for (var i = 0; i < res.length; i++) {
+        connection.query("Select stock_quantity, price, product_name from products where ?", { id: data.id}, 
+            function(err, res) {
+                if (err) throw err;
+                for (var i = 0; i < res.length; i++) {
                 // console.log(res[i].stock_quantity);
                 // console.log(data.unit);
                 
-                //Updates an item from "products" data table the user selects
-                if (res[i].stock_quantity > 0) {
-                    console.log(chalk.green("Adding to stock: " + res[i].product_name));
-                    var newStock = res[i].stock_quantity + parseInt(data.unit);
-                    // console.log(newStock);
-                    connection.query(
-                        "UPDATE products set? where?",
-                        [
-                            {
-                                stock_quantity: newStock
-                            },
-                            {
-                                id: data.id
+                    //Updates an item from "products" data table the user selects
+                    if (res[i].stock_quantity > 0) {
+                        console.log(chalk.green("Adding to stock: " + res[i].product_name));
+                        var newStock = res[i].stock_quantity + parseInt(data.unit);
+                        // console.log(newStock);
+                        connection.query(
+                            "UPDATE products set? where?",
+                            [
+                                {
+                                    stock_quantity: newStock
+                                },
+                                {
+                                    id: data.id
+                                }
+                            ],
+                            function(error, response) {
+                                if(error) throw error;
+                                console.log(chalk.green("Item(s) Successfully added to inventory"));
+                                console.log(chalk.magentaBright(response.affectedRows + " Products Edited!\n"));
+                                userContinue();
                             }
-                        ],
-                        function(error, response) {
-                            if(error) throw error;
-                            console.log(chalk.green("Item(s) Successfully added to inventory"));
-                            console.log(chalk.magentaBright(response.affectedRows + " Products Edited!\n"));
-                            userContinue();
-                        }
-                    )
-                }
+                        )
+                    }
                
-            }
-        })
+                }
+            })
         
     })
 }
@@ -154,16 +155,16 @@ function createProduct() {
     ]).then(function(create) {
         //Inserts a new item to the database "products" that the user creates
         connection.query("INSERT INTO products SET ?",
-        {
-            product_name: create.name,
-            department_name: create.department,
-            price: create.price,
-            stock_quantity: create.stock
-        },function(err){
-            if(err) throw err;
-            console.log(chalk.greenBright("New item has been created"));
-            userContinue();
-        }
+            {
+                product_name: create.name,
+                department_name: create.department,
+                price: create.price,
+                stock_quantity: create.stock
+            },function(err){
+                if(err) throw err;
+                console.log(chalk.greenBright("New item has been created"));
+                userContinue();
+            }
         )
     })
 }

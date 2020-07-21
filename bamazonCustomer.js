@@ -67,44 +67,45 @@ function purchaseCustomer() {
         console.log(chalk.cyan("You want item: " + data.id));
         console.log(chalk.cyan("You want this many: " + data.unit));
         //Selects the wanted values from the products table from Mysql
-        connection.query("Select stock_quantity, price, product_name from products where ?", { id: data.id}, function(err, res) {
-            if (err) throw err;
-            // userTable(data);
-            for (var i = 0; i < res.length; i++) {
+        connection.query("Select stock_quantity, price, product_name from products where ?", 
+            { id: data.id}, function(err, res) {
+                if (err) throw err;
+                // userTable(data);
+                for (var i = 0; i < res.length; i++) {
                 // console.log(res[i].stock_quantity);
                 // console.log(data.unit);
             
-                if (res[i].stock_quantity > parseInt(data.unit)) {
-                    console.log(chalk.blueBright("Buying: " + res[i].product_name));
-                    var newStock = res[i].stock_quantity - parseInt(data.unit);
-                    var total = res[i].price * parseInt(data.unit);
+                    if (res[i].stock_quantity > parseInt(data.unit)) {
+                        console.log(chalk.blueBright("Buying: " + res[i].product_name));
+                        var newStock = res[i].stock_quantity - parseInt(data.unit);
+                        var total = res[i].price * parseInt(data.unit);
                     
-                    // console.log(newStock);
-                    //Updates the data of the specific id and specific quantity the user provides
-                    connection.query(
-                        "UPDATE products set? where?",
-                        [
-                            {
-                                stock_quantity: newStock
-                            },
-                            {
-                                id: data.id
+                        // console.log(newStock);
+                        //Updates the data of the specific id and specific quantity the user provides
+                        connection.query(
+                            "UPDATE products set? where?",
+                            [
+                                {
+                                    stock_quantity: newStock
+                                },
+                                {
+                                    id: data.id
+                                }
+                            ],
+                            function(error) {
+                                if(error) throw error;
+                                console.log(chalk.magenta("Item(s) Successfully bought!"));
+                                console.log(chalk.magenta("Your total price is: $" + total));
+                                userContinue();
                             }
-                        ],
-                        function(error) {
-                            if(error) throw error;
-                            console.log(chalk.magenta("Item(s) Successfully bought!"));
-                            console.log(chalk.magenta("Your total price is: $" + total));
-                            userContinue();
-                        }
-                    )
+                        )
+                    }
+                    else {
+                        console.log(chalk.red("Insufficient quantity!"));
+                        userContinue();
+                    }
                 }
-                else {
-                    console.log(chalk.red("Insufficient quantity!"));
-                    userContinue();
-                }
-            }
-        })
+            })
         
     })
 }
