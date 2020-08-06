@@ -24,3 +24,10 @@ create table productTwo (
     user_quantity int,
     primary key (id)
 );
+create table supervisorTable (
+	id int auto_increment not null,
+    department_id int,
+    department_name varchar(60) null,
+    over_head_cost int,
+    primary key (id)
+);
