@@ -21,6 +21,7 @@ value ("Tooth Brush", "Health", 12.99, 10);
 create table productTwo (
 	id int auto_increment not null,
     item varchar(60) null,
+    product_sales decimal(10,2) default 0,
     pricing decimal(10,2) null,
     user_quantity int,
     primary key (id)

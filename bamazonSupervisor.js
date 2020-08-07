@@ -1,7 +1,7 @@
 const mysql = require('mysql');
 const inquirer = require('inquirer');
 const chalk = require('chalk');
-
+require('console.table');
 const connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
@@ -12,10 +12,38 @@ const connection = mysql.createConnection({
 connection.connect(function(err) {
     if(err) throw err;
     console.log("You've connected as ID " +connection.threadId + "\n");
-    // startCustomer();
+    promptSupervisor();
     connection.end();
-})
+});
 
+function promptSupervisor() {
+    console.log(chalk.yellow("\n==========================================="));
+    console.log(chalk.yellow("=       Welcome Supervisor!         ="));
+    console.log(chalk.yellow("===========================================\n"));
+    inquirer.prompt ([
+        {
+            type: "list",
+            name: "action",
+            message: "What would you like to do today?",
+            choices: [
+                "View Product Sales by Department",
+                "Create New Department",
+                "Exit"
+            ]
+        }
+    ]).then(function(answer) {
+        switch (answer.action) {
+            case "View Product Sales by Department":
+
+            break;
+            case "Create New Department":
+
+            break;
+            case "Exit":
+                connection.end();
+        }
+    })
+}
 // Code to sell product for bamCustomer
 // function sellProduct() {
 //     inquirer.prompt([
