@@ -1,5 +1,6 @@
-create database bamazon;
-use bamazon;
+DROP DATABASE IF EXISTS bamazon;
+CREATE DATABASE bamazon;
+USE bamazon;
 
 create table products (
 	id int auto_increment not null,
@@ -24,10 +25,16 @@ create table productTwo (
     user_quantity int,
     primary key (id)
 );
-create table supervisorTable (
-	id int auto_increment not null,
-    department_id int,
+create table departments (
+	department_id int auto_increment not null,
     department_name varchar(60) null,
-    over_head_cost int,
-    primary key (id)
+    over_head_cost DECIMAL(10, 2),
+    primary key (department_id)
 );
+SELECT * FROM departments;
+INSERT INTO departments (department_name, over_head_cost)
+VALUES ("News", 200),
+("Tech", 400),
+("Apparel", 50),
+("Necessities", 300),
+("Others", 100);
