@@ -46,18 +46,19 @@ function promptSupervisor() {
 function depTable() {
     connection.query("Select * from departments", function (err, res) {
         if(err) throw err;
-        for (var i = 0; i < res.length; i++) {
-            var depId = res[i].department_id;
-            var depName = res[i].department_name;
-            var cost = res[i].over_head_cost;
-            console.table([
-                {
-                    department_id: depId,
-                    department_name: depName,
-                    over_head_cost: cost
-                }
-            ])
-        }
+        // for (var i = 0; i < res.length; i++) {
+        //     var depId = res[i].department_id;
+        //     var depName = res[i].department_name;
+        //     var cost = res[i].over_head_cost;
+        //     console.table([
+        //         {
+        //             department_id: depId,
+        //             department_name: depName,
+        //             over_head_cost: cost
+        //         }
+        //     ])
+        // }
+        console.table(res);
         promptSupervisor();
     })
 };
