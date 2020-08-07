@@ -60,22 +60,23 @@ function lowStock() {
     connection.query("Select * from products where stock_quantity<=3", function (err, res) {
         if (err) throw err;
         // console.log(res);
-        for (var i= 0; i < res.length; i ++){
-            var number = res[i].id;
-            var name = res[i].product_name;
-            var depName = res[i].department_name;
-            var worth = res[i].price;
-            var stock = res[i].stock_quantity;
-            console.table([
-                {
-                    ID: number,
-                    Product: name,
-                    Department: depName,
-                    Price: worth,
-                    Quantity: stock
-                }
-            ]);
-        }
+        // for (var i= 0; i < res.length; i ++){
+        //     var number = res[i].id;
+        //     var name = res[i].product_name;
+        //     var depName = res[i].department_name;
+        //     var worth = res[i].price;
+        //     var stock = res[i].stock_quantity;
+        //     console.table([
+        //         {
+        //             ID: number,
+        //             Product: name,
+        //             Department: depName,
+        //             Price: worth,
+        //             Quantity: stock
+        //         }
+        //     ]);
+        // }
+        console.table(res);
         userContinue();
     })
 }
@@ -187,23 +188,24 @@ function userContinue() {
 function dataTable() {
     connection.query("Select * from products", function (err, res) {
         if(err) throw err;
-        for (var i= 0; i < res.length; i ++){
-            // console.log(res[0].id);
-            var number = res[i].id;
-            var name = res[i].product_name;
-            var depName = res[i].department_name;
-            var worth = res[i].price;
-            var stock = res[i].stock_quantity;
-            console.table([
-                {
-                    ID: number,
-                    Product: name,
-                    Department: depName,
-                    Price: worth,
-                    Quantity: stock
-                }
-            ]);
-        }
+        // for (var i= 0; i < res.length; i ++){
+        //     // console.log(res[0].id);
+        //     var number = res[i].id;
+        //     var name = res[i].product_name;
+        //     var depName = res[i].department_name;
+        //     var worth = res[i].price;
+        //     var stock = res[i].stock_quantity;
+        //     console.table([
+        //         {
+        //             ID: number,
+        //             Product: name,
+        //             Department: depName,
+        //             Price: worth,
+        //             Quantity: stock
+        //         }
+        //     ]);
+        // }
+        console.table(res);
         userContinue();
     })
     
