@@ -50,7 +50,6 @@ function startCustomer() {
         }
     })
 }
-
 function purchaseCustomer() {
     inquirer.prompt([
         {
@@ -72,14 +71,10 @@ function purchaseCustomer() {
                 if (err) throw err;
                 // userTable(data);
                 for (var i = 0; i < res.length; i++) {
-                // console.log(res[i].stock_quantity);
-                // console.log(data.unit);
-            
                     if (res[i].stock_quantity > parseInt(data.unit)) {
                         console.log(chalk.blueBright("Buying: " + res[i].product_name));
                         var newStock = res[i].stock_quantity - parseInt(data.unit);
                         var total = res[i].price * parseInt(data.unit);
-                    
                         // console.log(newStock);
                         //Updates the data of the specific id and specific quantity the user provides
                         connection.query(
@@ -109,7 +104,6 @@ function purchaseCustomer() {
         
     })
 }
-
 function userContinue() {
     inquirer.prompt([
         {
@@ -126,30 +120,28 @@ function userContinue() {
         }
     })
 }
-
 //Data table to show the user
 function dataTable() {
     connection.query("Select * from products", function (err, res) {
         if(err) throw err;
-        
-        for (var i= 0; i < res.length; i ++){
-            // console.log(res[0].id);
-            var number = res[i].id;
-            var name = res[i].product_name;
-            var depName = res[i].department_name;
-            var worth = res[i].price;
-            var stock = res[i].stock_quantity;
-            console.table([
-                {
-                    ID: number,
-                    Product: name,
-                    Department: depName,
-                    Price: worth,
-                    Quantity: stock
-                }
-            ]);
-        }
+        // for (var i= 0; i < res.length; i ++){
+        //     // console.log(res[0].id);
+        //     var number = res[i].id;
+        //     var name = res[i].product_name;
+        //     var depName = res[i].department_name;
+        //     var worth = res[i].price;
+        //     var stock = res[i].stock_quantity;
+        //     console.table([
+        //         {
+        //             ID: number,
+        //             Product: name,
+        //             Department: depName,
+        //             Price: worth,
+        //             Quantity: stock
+        //         }
+        //     ]);
+        // }
+        console.table(res);
         startCustomer();
     })
-    
 }
