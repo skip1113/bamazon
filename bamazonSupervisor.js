@@ -13,7 +13,6 @@ connection.connect(function(err) {
     if(err) throw err;
     console.log("You've connected as ID " +connection.threadId + "\n");
     promptSupervisor();
-    connection.end();
 });
 
 function promptSupervisor() {
@@ -34,7 +33,7 @@ function promptSupervisor() {
     ]).then(function(answer) {
         switch (answer.action) {
             case "View Product Sales by Department":
-
+                depTable();
             break;
             case "Create New Department":
 
@@ -44,6 +43,24 @@ function promptSupervisor() {
         }
     })
 }
+function depTable() {
+    connection.query("Select * from departments", function (err, res) {
+        if(err) throw err;
+        for (var i = 0; i < res.length; i++) {
+            var depId = res[i].department_id;
+            var depName = res[i].department_name;
+            var cost = res[i].over_head_cost;
+            console.table([
+                {
+                    department_id: depId,
+                    department_name: depName,
+                    over_head_cost: cost
+                }
+            ])
+        }
+        promptSupervisor();
+    })
+};
 // Code to sell product for bamCustomer
 // function sellProduct() {
 //     inquirer.prompt([
