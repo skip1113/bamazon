@@ -36,7 +36,7 @@ function promptSupervisor() {
                 depTable();
             break;
             case "Create New Department":
-
+                createNew();
             break;
             case "Exit":
                 connection.end();
@@ -61,6 +61,31 @@ function depTable() {
         promptSupervisor();
     })
 };
+function createNew() {
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "name",
+            message: "What is the name of the department you would like to create?"
+        },
+        {
+            type: "input",
+            name: "cost",
+            message: "What is the over head cost?"
+        }
+    ]).then(function(create) {
+        connection.query("INSERT INTO departments SET ? ", 
+        {
+            department_name: create.name,
+            over_head_cost: create.cost
+        },function(err) {
+            if(err) throw err;
+            console.log(chalk.greenBright("New Department has been created!"));
+            promptSupervisor();
+        }
+        )
+    })
+}
 // Code to sell product for bamCustomer
 // function sellProduct() {
 //     inquirer.prompt([
